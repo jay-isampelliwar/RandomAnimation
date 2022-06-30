@@ -12,7 +12,20 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   double height = 200;
   double width = 200;
-  Color containerCol = Colors.deepPurple;
+  List<Color> colors = [Colors.red, Colors.yellow];
+  List<Alignment> aliment = [
+    Alignment.bottomCenter,
+    Alignment.bottomLeft,
+    Alignment.bottomRight,
+    Alignment.center,
+    Alignment.centerLeft,
+    Alignment.centerRight,
+    Alignment.topCenter,
+    Alignment.topLeft,
+    Alignment.topRight,
+  ];
+  Alignment beginAlignment = Alignment.center;
+  Alignment endAlignment = Alignment.centerLeft;
   double pos = 100;
   double borderRadius = 20;
 
@@ -22,13 +35,29 @@ class _HomeState extends State<Home> {
       width = Random().nextInt(200) + 20;
       pos = Random().nextInt(300) + 100;
       borderRadius = Random().nextInt(50) + 5;
-      containerCol = Color.fromARGB(
-        255,
-        Random().nextInt(255),
-        Random().nextInt(255),
-        Random().nextInt(255),
-      );
+      for (int i = 0; i < colors.length; i++) {
+        colors[i] = getColor();
+      }
+      beginAlignment = aliment[Random().nextInt(aliment.length - 1)];
+      endAlignment = getRandomPos();
     });
+  }
+
+  Alignment getRandomPos() {
+    while (beginAlignment == endAlignment) {
+      endAlignment = aliment[Random().nextInt(aliment.length - 1)];
+    }
+
+    return endAlignment;
+  }
+
+  Color getColor() {
+    return Color.fromARGB(
+      255,
+      Random().nextInt(255),
+      Random().nextInt(255),
+      Random().nextInt(255),
+    );
   }
 
   @override
@@ -43,9 +72,10 @@ class _HomeState extends State<Home> {
             width: width,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(borderRadius),
-              color: containerCol,
+              gradient: LinearGradient(
+                  begin: beginAlignment, end: endAlignment, colors: colors),
             ),
-            duration: const Duration(milliseconds: 400),
+            duration: const Duration(milliseconds: 500),
           ),
           const Spacer(),
           Center(
